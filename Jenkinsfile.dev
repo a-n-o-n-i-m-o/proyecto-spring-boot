@@ -2,9 +2,6 @@ pipeline {
     agent any
 
     environment {
-        name = 'demo-app'
-        port = '8080:8080'
-        ruta = 'D:/proyecto-spring/demo'
         dockerRegistryCredentials = 'docker_credencial' // Utiliza el ID de tu credencial de Docker
     }
 
@@ -18,20 +15,6 @@ pipeline {
                     }
                 }
             }
-        }
-    }
-
-    post {
-        always {
-            // Detener y eliminar el contenedor
-            script {
-                dir(ruta) {
-                    sh "docker stop ${name}"
-                    sh "docker rm ${name}"
-                }
-            }
-            // Eliminar el workspace de Jenkins
-            cleanWs()
         }
     }
 }
