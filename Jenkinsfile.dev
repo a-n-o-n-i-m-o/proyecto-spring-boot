@@ -5,44 +5,70 @@ pipeline {
         name = 'demo-app'
         port = '8080:8080'
         ruta = 'D:/proyecto-spring/demo'
+        DOCKER_CREDENCIAL = 'docker_credencial' // Reemplaza con el ID o nombre de tu credencial de Docker
     }
 
     stages {
-       /* stage('Construir imagen') {
+        stage('Iniciar sesión en Docker') {
             steps {
                 script {
-                    dir(projectPath) {
-                        bat "docker build -t ${name} ."
-                    }
-                }
-            }
-        }*/
-
-        stage('Docker images') {
-            steps {
-                script {
-                    dir(ruta) {
-                        bat 'docker images'
+                    withCredentials([usernamePassword(credentialsId: dockerRegistryCredentials, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
+                        sh 'docker info'
                     }
                 }
             }
         }
 
-       /* stage('Construir contenedor') {
+                
+       
+
+
+        stage('Construir y empaquetar con Maven') {
             steps {
                 script {
-                    dir(projectPath) {
-                        bat "docker run -d --publish ${port} ${name}"
+                    dir(ruta) {
+                        sh 'mvn clean package'
                     }
                 }
             }
-        }*/
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                script {
+                    dir(ruta) {
+                        sh "docker build -t ${name} ."
+                    }
+                }
+            }
+        }
+
+        stage('Docker images') {
+            steps {
+                script {
+                    dir(ruta) {
+                        sh 'docker images'
+                    }
+                }
+            }
+        }
+
+        stage('Construir contenedor') {
+            steps {
+                script {
+                    dir(ruta) {
+                        sh "docker run -d --publish ${port} ${name}"
+                    }
+                }
+            }
+        }
 
         stage('Docker container') {
             steps {
                 script {
                     dir(ruta) {
-                        bat 'docker ps'
+                        sh 'docker ps'
                     }
                 }
             }
@@ -52,6 +78,20 @@ pipeline {
             steps {
                 echo 'Exito'
             }
+        }
+    }
+
+    post {
+        always {
+            // Detener y eliminar el contenedor
+            script {
+                dir(ruta) {
+                    sh "docker stop ${name}"
+                    sh "docker rm ${name}"
+                }
+            }
+            // Eliminar el workspace de Jenkins
+            cleanWs()
         }
     }
 }
