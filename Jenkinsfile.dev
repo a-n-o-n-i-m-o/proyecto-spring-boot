@@ -19,8 +19,6 @@ pipeline {
                 }
             }
         }
-    }
-     stages {
         stage('Construir imagen') {
             steps {
                 script {
@@ -67,7 +65,4 @@ pipeline {
             }
         }
     }
-
-
-
 }
