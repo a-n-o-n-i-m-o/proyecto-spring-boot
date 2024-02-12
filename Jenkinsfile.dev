@@ -23,17 +23,15 @@ pipeline {
                         steps {
                                 script {
                                     dir(ruta){
-                                        // Verificar si el contenedor 'demo-app1' existe
-                                        def containerExists = bat(script: "cat comandodocker.txt | grep demo-app1", returnStatus: true) == 0
+                                        
+                                         def containerExists = bat(script: "cat comandodocker.txt | grep demo-app1", returnStatus: true).trim()
 
-                                        // Si el contenedor existe, intentar detenerlo
-                                        if (containerExists == 0) {
-                                            echo 'bien'
-                                            
-                                        }else{
-                                            echo 'salio mal'
+                                        if (containerExists.empty) {
+                                            echo 'La salida está vacía.'
+                                        } else {
+                                            echo 'La salida esta lleno'
                                         }
-                                    }
+
                                 }
                             }
                         }
