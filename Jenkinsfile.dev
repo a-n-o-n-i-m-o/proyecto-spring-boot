@@ -22,7 +22,6 @@ pipeline {
             steps {
                 script {
                     dir(ruta) {
-                        // Asegúrate de que Docker esté instalado y en el PATH
                         sh "docker build -t ${name} ."
                     }
                 }
@@ -40,7 +39,6 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    // Asegúrate de tener Docker en el PATH o utiliza el comando completo de Docker
                     sh "docker run -d --publish ${port} ${name}"
                 }
             }
@@ -58,6 +56,18 @@ pipeline {
             steps {
                 echo 'Exito'
             }
+        }
+    }
+
+    post {
+        always {
+            // Detener y eliminar el contenedor
+            script {
+                sh "docker stop ${name}"
+                sh "docker rm ${name}"
+            }
+            // Eliminar el workspace de Jenkins
+            cleanWs()
         }
     }
 }
