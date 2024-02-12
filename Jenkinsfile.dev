@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    environment {
+        name = 'demo-app'
+        port = '8080:8080'
+    }
+
+    stages {
+        stage('Construir imagen') {
+            steps {
+                script {
+                    bat "docker build -t ${name} ."
+                }
+            }
+        }
+
+        stage('Docker images') {
+            steps {
+                script {
+                    bat 'docker images'
+                }
+            }
+        }
+
+        stage('Construir contenedor') {
+            steps {
+                script {
+                    bat "docker run -it --publish ${port} ${name}"
+                }
+            }
+        }
+
+        stage('Docker container') {
+            steps {
+                script {
+                    bat 'docker ps'
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Exito'
+            }
+        }
+    }
+}
