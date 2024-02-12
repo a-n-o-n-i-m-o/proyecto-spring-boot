@@ -4,13 +4,16 @@ pipeline {
     environment {
         name = 'demo-app'
         port = '8080:8080'
+        projectPath = 'D:/proyecto-spring/demo'  // Ruta a tu proyecto Spring
     }
 
     stages {
         stage('Construir imagen') {
             steps {
                 script {
-                    bat "docker build -t demo-app ."
+                    dir(projectPath) {
+                        bat "docker build -t ${name} ."
+                    }
                 }
             }
         }
@@ -18,7 +21,9 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    bat 'docker images'
+                    dir(projectPath) {
+                        bat 'docker images'
+                    }
                 }
             }
         }
@@ -26,7 +31,9 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    bat "docker run -it --publish ${port} ${name}"
+                    dir(projectPath) {
+                        bat "docker run -it --publish ${port} ${name}"
+                    }
                 }
             }
         }
@@ -46,3 +53,4 @@ pipeline {
         }
     }
 }
+
