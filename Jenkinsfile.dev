@@ -24,7 +24,7 @@ pipeline {
                                 script {
                                     dir(ruta){
                                         
-                                         def containerExists = bat(script: "cat comandodocker.txt | grep demo-app1", returnStatus: true).trim()
+                                        def containerExists = bat(script: "findstr /C:demo-app1 ${ruta}/comandodocker.txt", returnStatus: true).trim()
 
                                         if (containerExists.empty) {
                                             echo 'La salida está vacía.'
