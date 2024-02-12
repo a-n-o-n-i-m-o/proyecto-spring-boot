@@ -9,7 +9,7 @@ pipeline {
     }
 
     stages {
-        stage('Iniciar sesión en Docker') {
+        stage('Iniciar sesion en Docker') {
             steps {
                 script {
                     dir(ruta){
@@ -21,61 +21,5 @@ pipeline {
             }
         }
     }
-
-        stage('Construir y empaquetar con Maven') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh 'mvn clean package'
-                    }
-                }
-            }
-        }
-
-        stage('Construir imagen Docker') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh "docker build -t ${name} ."
-                    }
-                }
-            }
-        }
-
-        stage('Docker images') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh 'docker images'
-                    }
-                }
-            }
-        }
-
-        stage('Construir contenedor') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh "docker run -d --publish ${port} ${name}"
-                    }
-                }
-            }
-        }
-
-        stage('Docker container') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh 'docker ps'
-                    }
-                }
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo 'Exito'
-            }
-        }
-    }
+  }
 }
