@@ -23,7 +23,14 @@ pipeline {
             steps {
                 script {
                     dir(ruta) {
-                        bat "docker stop ${name}"
+                    def containerExists = sh(script: "docker ps -q -f ${name}", returnStatus: true) == 0
+
+                    // Si el contenedor existe, detenerlo
+                    if (containerExists) {
+                        sh "docker stop ${name}"
+                    } else {
+                        echo "El contenedor ${name} no existe."
+                    }
                     }
                 }
             }
