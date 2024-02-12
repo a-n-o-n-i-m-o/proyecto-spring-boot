@@ -9,10 +9,9 @@ pipeline {
     }
 
     stages {
-        stage('Iniciar sesion en Docker') {
+          stage('Iniciar sesión en Docker') {
             steps {
                 script {
-                    dir(ruta){
                     withCredentials([usernamePassword(credentialsId: dockerRegistryCredentials, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
                         sh 'docker info'
@@ -20,6 +19,5 @@ pipeline {
                 }
             }
         }
-    }
   }
 }
