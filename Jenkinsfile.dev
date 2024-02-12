@@ -4,7 +4,7 @@ pipeline {
     environment {
         name = 'demo-app'
         port = '8080:8080'
-        projectPath = 'D:/proyecto-spring/demo'  // Ruta a tu proyecto Spring
+        projectPath = 'D:/proyecto-spring/demo'
     }
 
     stages {
@@ -32,7 +32,7 @@ pipeline {
             steps {
                 script {
                     dir(projectPath) {
-                        bat "docker run -it --publish ${port} ${name}"
+                        bat "docker run -d --publish 8080:8080 ${name}"
                     }
                 }
             }
