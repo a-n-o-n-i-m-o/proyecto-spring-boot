@@ -1,10 +1,19 @@
+import java.util.UUID
+
+def generateRandomName(prefix = 'demo-app') {
+    def uniqueId = UUID.randomUUID().toString().substring(0, 8)
+    return "${prefix}-${uniqueId}"
+}
+
+// Ejemplo de uso
+def name = generateRandomName()
+
 pipeline {
     agent any
 
     environment {
-        name = 'demo-app'
         port = '8080:8080'
-        ruta = 'D:/proyecto-spring/demo'
+        ruta = 'D:/proyecto-spring/demo' 
         dockerRegistryCredentials = 'docker_credencial' // Utiliza el ID de tu credencial de Docker
     }
 
