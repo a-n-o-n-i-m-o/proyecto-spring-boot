@@ -58,16 +58,4 @@ pipeline {
             }
         }
     }
-
-    post {
-        always {
-            // Detener y eliminar el contenedor
-            script {
-                sh "docker stop ${name}"
-                sh "docker rm ${name}"
-            }
-            // Eliminar el workspace de Jenkins
-            cleanWs()
-        }
-    }
 }
