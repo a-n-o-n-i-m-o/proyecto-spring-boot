@@ -2,6 +2,9 @@ pipeline {
     agent any
 
     environment {
+        name = 'demo-app'
+        port = '8080:8080'
+        ruta = 'D:/proyecto-spring/demo'
         dockerRegistryCredentials = 'docker_credencial' // Utiliza el ID de tu credencial de Docker
     }
 
@@ -17,4 +20,54 @@ pipeline {
             }
         }
     }
+     stages {
+        stage('Construir imagen') {
+            steps {
+                script {
+                    dir(ruta) {
+                        bat "docker build -t ${name} ."
+                    }
+                }
+            }
+        }
+
+        stage('Docker images') {
+            steps {
+                script {
+                    dir(ruta) {
+                        bat 'docker images'
+                    }
+                }
+            }
+        }
+
+        stage('Construir contenedor') {
+            steps {
+                script {
+                    dir(ruta) {
+                        bat "docker run -d --publish ${port} ${name}"
+                    }
+                }
+            }
+        }
+
+        stage('Docker container') {
+            steps {
+                script {
+                    dir(ruta){
+                    bat 'docker ps'
+                    }
+                }
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Exito'
+            }
+        }
+    }
+
+
+
 }
