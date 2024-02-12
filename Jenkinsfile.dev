@@ -8,7 +8,7 @@ pipeline {
     }
 
     stages {
-        stage('Construir imagen') {
+       /* stage('Construir imagen') {
             steps {
                 script {
                     dir(projectPath) {
@@ -16,7 +16,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Docker images') {
             steps {
@@ -28,7 +28,7 @@ pipeline {
             }
         }
 
-        stage('Construir contenedor') {
+       /* stage('Construir contenedor') {
             steps {
                 script {
                     dir(projectPath) {
@@ -36,7 +36,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
 
         stage('Docker container') {
             steps {
