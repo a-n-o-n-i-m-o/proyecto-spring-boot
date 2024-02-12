@@ -19,6 +19,25 @@ pipeline {
                 }
             }
         }
+         stage('Eliminar contenedor con mismo name') {
+                        steps {
+                                script {
+                                    dir(ruta){
+                                        // Verificar si el contenedor 'demo-app1' existe
+                                        def containerExists = bat(script: "cat comandodocker.txt | grep demo-app1", returnStatus: true) == 0
+
+                                        // Si el contenedor existe, intentar detenerlo
+                                        if (containerExists == 0) {
+                                            echo 'bien'
+                                            
+                                        }else{
+                                            echo 'salio mal'
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
 
         stage('Construir imagen') {
             steps {

@@ -1,0 +1,3 @@
+failed to get console mode for stdout: Controlador no válido.
+CONTAINER ID   IMAGE       COMMAND               CREATED         STATUS         PORTS                    NAMES
+a75bbf1308c3   demo-app1   "java -jar app.jar"   2 minutes ago   Up 2 minutes   0.0.0.0:8080->8080/tcp   zealous_fermat
