@@ -11,7 +11,7 @@ pipeline {
         stage('Construir imagen') {
             steps {
                 script {
-                    dir(projectPath) {
+                    dir(ruta) {
                         bat "docker build -t ${name} ."
                     }
                 }
@@ -21,7 +21,7 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    dir(projectPath) {
+                    dir(ruta) {
                         bat 'docker images'
                     }
                 }
@@ -31,7 +31,7 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    dir(projectPath) {
+                    dir(ruta) {
                         bat "docker run -d --publish ${port} ${name}"
                     }
                 }
