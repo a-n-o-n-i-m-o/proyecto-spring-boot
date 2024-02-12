@@ -11,9 +11,8 @@ pipeline {
         stage('Construir imagen') {
             steps {
                 script {
-                    dir(ruta) {
-                        // Utiliza la ruta completa de docker
-                        bat "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" build -t ${name} ."
+                    dir(projectPath) {
+                        bat "docker build -t ${name} ."
                     }
                 }
             }
@@ -22,9 +21,8 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    dir(ruta) {
-                        // Utiliza la ruta completa de docker
-                        bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" images'
+                    dir(projectPath) {
+                        bat 'docker images'
                     }
                 }
             }
@@ -33,9 +31,8 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    dir(ruta) {
-                        // Ajusta el comando para Windows
-                        bat "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" run -d -p ${port} ${name}"
+                    dir(projectPath) {
+                        bat "docker run -d --publish ${port} ${name}"
                     }
                 }
             }
@@ -44,23 +41,15 @@ pipeline {
         stage('Docker container') {
             steps {
                 script {
-                    // Utiliza la ruta completa de docker
-                    bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" ps'
+                    bat 'docker ps'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Éxito'
+                echo 'Exito'
             }
-        }
-    }
-
-    post {
-        always {
-            // Elimina el workspace al final del pipeline
-            cleanWs()
         }
     }
 }
