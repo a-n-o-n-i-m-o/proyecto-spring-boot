@@ -24,12 +24,13 @@ pipeline {
                                 script {
                                     dir(ruta){
                                         
-                                        def containerExists = bat(script: "findstr /C:demo-app1 ${ruta}/comandodocker.txt", returnStatus: true).trim()
+                                         def containerExists = bat(script: "findstr /C:demo-app1 ${ruta}/comandodocker.txt", returnStatus: true) == 0
 
-                                        if (containerExists.empty) {
-                                            echo 'La salida está vacía.'
+                                        // Si el contenedor existe, intentar detenerlo
+                                        if (containerExists == '0') {
+                                            echo 'bien'
                                         } else {
-                                            echo 'La salida esta lleno'
+                                            echo 'salio mal'
                                         }
 
                                 }
