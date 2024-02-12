@@ -23,7 +23,7 @@ pipeline {
             steps {
                 script {
                     dir(ruta){
-                    def containerExists = bat(script: "docker ps -q -f name=${name}", returnStatus: true) == 0
+                    def containerExists = sh(script: 'docker ps -q -f name=demo-app1', returnStatus: true) == 0
 
                     // Si el contenedor existe, detenerlo
                     if (containerExists) {
