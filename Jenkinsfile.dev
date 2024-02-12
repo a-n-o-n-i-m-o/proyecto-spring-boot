@@ -21,7 +21,7 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    dir(projectPath) {
+                    dir(ruta) {
                         bat 'docker images'
                     }
                 }
@@ -41,7 +41,9 @@ pipeline {
         stage('Docker container') {
             steps {
                 script {
-                    bat 'docker ps'
+                    dir(ruta) {
+                        bat 'docker ps'
+                    }
                 }
             }
         }
