@@ -22,12 +22,12 @@ pipeline {
         stage('Eliminar contenedor con mismo name') {
             steps {
                 script {
-                    dir(ruta) {
-                    def containerExists = sh(script: "docker ps -q -f ${name}", returnStatus: true) == 0
+                    dir(ruta){
+                    def containerExists = bat(script: "docker ps -q -f ${name}", returnStatus: true) == 0
 
                     // Si el contenedor existe, detenerlo
                     if (containerExists) {
-                        sh "docker stop ${name}"
+                        bat "docker stop ${name}"
                     } else {
                         echo "El contenedor ${name} no existe."
                     }
