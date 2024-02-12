@@ -28,6 +28,16 @@ pipeline {
                 }
             }
         }
+        stage('Eliminar contenedor con mismo name') {
+            steps {
+                script {
+                    dir(ruta) {
+                        bat "docker stop ${name}"
+                    }
+                }
+            }
+        }
+
         stage('Construir imagen') {
             steps {
                 script {
