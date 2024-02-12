@@ -12,6 +12,7 @@ pipeline {
         stage('Iniciar sesión en Docker') {
             steps {
                 script {
+                    dir(ruta){
                     withCredentials([usernamePassword(credentialsId: dockerRegistryCredentials, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
                         sh 'docker info'
@@ -19,10 +20,7 @@ pipeline {
                 }
             }
         }
-
-                
-       
-
+    }
 
         stage('Construir y empaquetar con Maven') {
             steps {
@@ -78,20 +76,6 @@ pipeline {
             steps {
                 echo 'Exito'
             }
-        }
-    }
-
-    post {
-        always {
-            // Detener y eliminar el contenedor
-            script {
-                dir(ruta) {
-                    sh "docker stop ${name}"
-                    sh "docker rm ${name}"
-                }
-            }
-            // Eliminar el workspace de Jenkins
-            cleanWs()
         }
     }
 }
