@@ -8,11 +8,22 @@ pipeline {
     }
 
     stages {
-        stage('Construir imagen') {
+        stage('Construir y empaquetar con Maven') {
             steps {
                 script {
                     dir(ruta) {
-                        bat "docker build -t ${name} ."
+                        sh 'mvn clean package'
+                    }
+                }
+            }
+        }
+
+        stage('Construir imagen Docker') {
+            steps {
+                script {
+                    dir(ruta) {
+                        // Asegúrate de que Docker esté instalado y en el PATH
+                        sh "docker build -t ${name} ."
                     }
                 }
             }
@@ -21,9 +32,7 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    dir(ruta) {
-                        bat 'docker images'
-                    }
+                    sh 'docker images'
                 }
             }
         }
@@ -31,9 +40,8 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    dir(ruta) {
-                        bat "docker run -d --publish ${port} ${name}"
-                    }
+                    // Asegúrate de tener Docker en el PATH o utiliza el comando completo de Docker
+                    sh "docker run -d --publish ${port} ${name}"
                 }
             }
         }
@@ -41,7 +49,7 @@ pipeline {
         stage('Docker container') {
             steps {
                 script {
-                    bat 'docker ps'
+                    sh 'docker ps'
                 }
             }
         }
@@ -53,4 +61,3 @@ pipeline {
         }
     }
 }
-
