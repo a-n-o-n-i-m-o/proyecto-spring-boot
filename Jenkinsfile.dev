@@ -20,20 +20,26 @@ pipeline {
             }
         }
         stage('Eliminar contenedor con mismo name') {
-            steps {
-                script {
-                    dir(ruta){
-                    def containerExists = bat(script: 'docker ps -q -f name=demo-app1', returnStatus: true) == 0
+             steps {
+                    script {
+                        dir(ruta){
+                            // Verificar si el contenedor 'demo-app1' existe
+                            def containerExists = bat(script: "docker ps -q -f name=${name}", returnStatus: true) == 0
 
-                    // Si el contenedor existe, detenerlo
-                    if (containerExists) {
-                        bat "docker stop ${name}"
-                    } else {
-                        echo "El contenedor ${name} no existe."
-                    }
+                            // Si el contenedor existe, intentar detenerlo
+                            if (containerExists) {
+                                def stopResult = bat(script: "docker stop ${name}", returnStatus: true)
+                                if (stopResult == 0) {
+                                    echo 'El contenedor "demo-app1" se ha detenido con éxito.'
+                                } else {
+                                    error "Error al detener el contenedor 'demo-app1'."
+                                }
+                            } else {
+                                echo 'El contenedor "demo-app1" no existe.'
+                            }
+                        }
                     }
                 }
-            }
         }
 
         stage('Construir imagen') {
