@@ -8,21 +8,12 @@ pipeline {
     }
 
     stages {
-        stage('Construir y empaquetar con Maven') {
+        stage('Construir imagen') {
             steps {
                 script {
                     dir(ruta) {
-                        sh 'mvn clean package'
-                    }
-                }
-            }
-        }
-
-        stage('Construir imagen Docker') {
-            steps {
-                script {
-                    dir(ruta) {
-                        sh "docker build -t ${name} ."
+                        // Utiliza la ruta completa de docker
+                        bat "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" build -t ${name} ."
                     }
                 }
             }
@@ -31,7 +22,10 @@ pipeline {
         stage('Docker images') {
             steps {
                 script {
-                    sh 'docker images'
+                    dir(ruta) {
+                        // Utiliza la ruta completa de docker
+                        bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" images'
+                    }
                 }
             }
         }
@@ -39,7 +33,10 @@ pipeline {
         stage('Construir contenedor') {
             steps {
                 script {
-                    sh "docker run -d --publish ${port} ${name}"
+                    dir(ruta) {
+                        // Ajusta el comando para Windows
+                        bat "\"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe\" run -d -p ${port} ${name}"
+                    }
                 }
             }
         }
@@ -47,15 +44,23 @@ pipeline {
         stage('Docker container') {
             steps {
                 script {
-                    sh 'docker ps'
+                    // Utiliza la ruta completa de docker
+                    bat '"C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe" ps'
                 }
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Exito'
+                echo 'Éxito'
             }
+        }
+    }
+
+    post {
+        always {
+            // Elimina el workspace al final del pipeline
+            cleanWs()
         }
     }
 }
