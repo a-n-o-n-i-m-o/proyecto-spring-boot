@@ -10,7 +10,7 @@ pipeline {
         stage('Construir imagen') {
             steps {
                 script {
-                    bat "docker build -t ${name} ."
+                    bat "docker build -t demo-app ."
                 }
             }
         }
