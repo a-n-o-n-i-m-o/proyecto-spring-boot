@@ -5,11 +5,11 @@ pipeline {
         name = 'demo-app'
         port = '8080:8080'
         ruta = 'D:/proyecto-spring/demo'
-        DOCKER_CREDENCIAL = 'docker_credencial' // Reemplaza con el ID o nombre de tu credencial de Docker
+        dockerRegistryCredentials = 'docker_credencial' // Utiliza el ID de tu credencial de Docker
     }
 
     stages {
-          stage('Iniciar sesión en Docker') {
+        stage('Iniciar sesión en Docker') {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: dockerRegistryCredentials, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
@@ -19,5 +19,19 @@ pipeline {
                 }
             }
         }
-  }
+    }
+
+    post {
+        always {
+            // Detener y eliminar el contenedor
+            script {
+                dir(ruta) {
+                    sh "docker stop ${name}"
+                    sh "docker rm ${name}"
+                }
+            }
+            // Eliminar el workspace de Jenkins
+            cleanWs()
+        }
+    }
 }
