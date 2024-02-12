@@ -14,8 +14,8 @@ pipeline {
                 script {
                     dir(ruta){
                     withCredentials([usernamePassword(credentialsId: dockerRegistryCredentials, usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASSWORD')]) {
-                        sh "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
-                        sh 'docker info'
+                        bat "docker login -u $DOCKER_USER -p $DOCKER_PASSWORD"
+                        bat 'docker info'
                     }}
                 }
             }
